@@ -1,0 +1,7 @@
+venv/
+venv.bak/
+venv-*
+# venv*
+**/migrations
+*schema.yaml
+inf.txt

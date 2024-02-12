@@ -1,0 +1,1544 @@
+openapi: 3.0.3
+info:
+  title: PortfolioBackendSchema
+  version: 1.0.0
+  description: QandeelKhan.com portfolio project documentation
+paths:
+  /api/blog/:
+    get:
+      operationId: blog_list
+      tags:
+      - blog
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogPost'
+          description: ''
+  /api/blog/{id}/:
+    get:
+      operationId: blog_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog post.
+        required: true
+      tags:
+      - blog
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+          description: ''
+  /api/blog/{id}/comments/:
+    post:
+      operationId: blog_comments_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Comment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Comment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comment'
+          description: ''
+  /api/blog/{id}/comments/{comment_id}/reply/:
+    post:
+      operationId: blog_comments_reply_create
+      parameters:
+      - in: path
+        name: comment_id
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reply'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Reply'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Reply'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+          description: ''
+  /api/blog/{id}/delete/:
+    delete:
+      operationId: blog_delete_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog post.
+        required: true
+      tags:
+      - blog
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/blog/{id}/update/:
+    put:
+      operationId: blog_update_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog post.
+        required: true
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+          description: ''
+    patch:
+      operationId: blog_update_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this blog post.
+        required: true
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedBlogPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedBlogPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedBlogPost'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+          description: ''
+  /api/blog/create/:
+    post:
+      operationId: blog_create_create
+      tags:
+      - blog
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+          description: ''
+  /api/changepassword//{id}/:
+    put:
+      operationId: changepassword_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - changepassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserChangePassword'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserChangePassword'
+          description: ''
+  /api/logout//:
+    post:
+      operationId: logout_create
+      tags:
+      - logout
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          description: No response body
+  /api/order-progress/:
+    get:
+      operationId: order_progress_list
+      tags:
+      - order-progress
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderProgress'
+          description: ''
+    post:
+      operationId: order_progress_create
+      tags:
+      - order-progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderProgress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderProgress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderProgress'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProgress'
+          description: ''
+  /api/order-progress/{id}/:
+    get:
+      operationId: order_progress_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - order-progress
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProgress'
+          description: ''
+    put:
+      operationId: order_progress_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - order-progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderProgress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderProgress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderProgress'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProgress'
+          description: ''
+    patch:
+      operationId: order_progress_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - order-progress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderProgress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderProgress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrderProgress'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderProgress'
+          description: ''
+    delete:
+      operationId: order_progress_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - order-progress
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/orders/:
+    get:
+      operationId: orders_list
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: ''
+    post:
+      operationId: orders_create
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    put:
+      operationId: orders_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    patch:
+      operationId: orders_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedOrder'
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    delete:
+      operationId: orders_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /api/reset-password/{uid}/{token}//:
+    post:
+      operationId: reset_password_create
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - reset-password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserPasswordReset'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content: {}
+          description: ''
+  /api/send-reset-password-email//:
+    post:
+      operationId: send_reset_password_email_create
+      tags:
+      - send-reset-password-email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendPasswordResetEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendPasswordResetEmail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SendPasswordResetEmail'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content: {}
+          description: ''
+  /api/token/:
+    post:
+      operationId: token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/user/login/:
+    post:
+      operationId: user_login_create
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLogin'
+          description: ''
+  /api/user/profile//:
+    get:
+      operationId: user_profile_list
+      tags:
+      - user
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+          description: ''
+    post:
+      operationId: user_profile_create
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/user/profile//{id}/:
+    get:
+      operationId: user_profile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - user
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: user_profile_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: user_profile_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    delete:
+      operationId: user_profile_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - user
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/user/register/:
+    post:
+      operationId: user_register_create
+      tags:
+      - user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content: {}
+          description: ''
+components:
+  schemas:
+    BlankEnum:
+      enum:
+      - ''
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        post_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogPostImage'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          readOnly: true
+        comment_count:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        cover_image:
+          type: string
+          format: uri
+        initial_paragraph:
+          type: string
+        paragraph_heading:
+          type: string
+          maxLength: 255
+        quote:
+          type: string
+          maxLength: 255
+        quote_writer:
+          type: string
+          maxLength: 255
+        second_paragraph:
+          type: string
+        paragraph_after_image:
+          type: string
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        author_first_name:
+          type: string
+          readOnly: true
+        author_last_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - author_first_name
+      - author_last_name
+      - category
+      - comment_count
+      - comments
+      - cover_image
+      - created_at
+      - full_name
+      - id
+      - initial_paragraph
+      - paragraph_after_image
+      - paragraph_heading
+      - post_images
+      - quote
+      - quote_writer
+      - second_paragraph
+      - title
+      - updated_at
+    BlogPostImage:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        images:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - images
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        comment_count:
+          type: string
+          readOnly: true
+        replies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reply'
+          readOnly: true
+        created_date:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        comment_text:
+          type: string
+        post:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        author_first_name:
+          type: string
+          readOnly: true
+        author_last_name:
+          type: string
+          readOnly: true
+        author_full_name:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - author_first_name
+      - author_full_name
+      - author_last_name
+      - comment_count
+      - comment_text
+      - created_date
+      - id
+      - post
+      - replies
+      - updated_at
+    Nested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_date:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        comment_text:
+          type: string
+        post:
+          type: integer
+        author:
+          type: integer
+      required:
+      - author
+      - comment_text
+      - created_date
+      - id
+      - post
+      - updated_at
+    NullEnum:
+      enum:
+      - null
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        order_type:
+          $ref: '#/components/schemas/OrderTypeEnum'
+        status:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        active_status:
+          type: boolean
+          nullable: true
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        project_name:
+          type: string
+          maxLength: 255
+        project_description:
+          type: string
+        total_price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        order_count:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - order_count
+      - order_type
+      - project_description
+      - project_name
+      - updated_at
+      - user
+    OrderProgress:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+        frontend_percentage:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        backend_percentage:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        design_percentage:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - id
+      - order
+      - updated_at
+    OrderTypeEnum:
+      enum:
+      - e-commerce
+      - blog
+      - custom
+      type: string
+      description: |-
+        * `e-commerce` - e-commerce
+        * `blog` - blog
+        * `custom` - custom
+    PatchedBlogPost:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        post_images:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlogPostImage'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+          readOnly: true
+        comment_count:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 100
+        cover_image:
+          type: string
+          format: uri
+        initial_paragraph:
+          type: string
+        paragraph_heading:
+          type: string
+          maxLength: 255
+        quote:
+          type: string
+          maxLength: 255
+        quote_writer:
+          type: string
+          maxLength: 255
+        second_paragraph:
+          type: string
+        paragraph_after_image:
+          type: string
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        author_first_name:
+          type: string
+          readOnly: true
+        author_last_name:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+    PatchedOrder:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        order_type:
+          $ref: '#/components/schemas/OrderTypeEnum'
+        status:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        active_status:
+          type: boolean
+          nullable: true
+        payment_status:
+          $ref: '#/components/schemas/PaymentStatusEnum'
+        project_name:
+          type: string
+          maxLength: 255
+        project_description:
+          type: string
+        total_price:
+          type: number
+          format: double
+          maximum: 100000000
+          minimum: -100000000
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        due_date:
+          type: string
+          format: date-time
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        order_count:
+          type: string
+          readOnly: true
+    PatchedOrderProgress:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+        frontend_percentage:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        backend_percentage:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        design_percentage:
+          type: integer
+          maximum: 32767
+          minimum: 0
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedUserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        profile_image:
+          type: string
+          format: uri
+          nullable: true
+        tc:
+          type: boolean
+        is_active:
+          type: boolean
+        is_staff:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PaymentStatusEnum:
+      enum:
+      - pending
+      - approved
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - pending
+        * `approved` - approved
+        * `cancelled` - cancelled
+    Reply:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        reply_text:
+          type: string
+        comment_id:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        author_full_name:
+          type: string
+          readOnly: true
+      required:
+      - author
+      - author_full_name
+      - comment_id
+      - created_at
+      - id
+      - reply_text
+      - updated_at
+    RoleEnum:
+      enum:
+      - admin
+      - staff
+      - regular
+      type: string
+      description: |-
+        * `admin` - Admin
+        * `staff` - Staff
+        * `regular` - Regular
+    SendPasswordResetEmail:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+      required:
+      - email
+    StatusEnum:
+      enum:
+      - pending
+      - in_progress
+      - completed
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - pending
+        * `in_progress` - in_Progress
+        * `completed` - completed
+        * `cancelled` - cancelled
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    UserChangePassword:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        password2:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - password
+      - password2
+    UserLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - email
+      - password
+    UserPasswordReset:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 255
+        password2:
+          type: string
+          writeOnly: true
+          maxLength: 255
+      required:
+      - password
+      - password2
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+        profile_image:
+          type: string
+          format: uri
+          nullable: true
+        tc:
+          type: boolean
+        is_active:
+          type: boolean
+        is_staff:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - first_name
+      - id
+      - is_staff
+      - last_name
+      - tc
+      - updated_at
+    UserRegistration:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        password:
+          type: string
+          writeOnly: true
+          maxLength: 128
+        password2:
+          type: string
+          writeOnly: true
+        tc:
+          type: boolean
+      required:
+      - email
+      - first_name
+      - last_name
+      - password
+      - password2
+      - tc
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

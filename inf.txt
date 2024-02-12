@@ -1,0 +1,95 @@
+celery -A StorefrontBackend2 beat
+celery -A StorefrontBackend2 flower
+pwd or py.test
+
+locust -f locustfiles/browse_products.py
+docker run -d -p 6379:6379 redis 
+
+silk use localhost:8000/silk/ of our project
+
+add /media/ and /static/ to gitignore
+
+install whitenoise: dajngo does't support serving static files in production even though we collect them using cmd  
+collectstatic but to add this feature in production we have to install library whitenoise,using
+whitenoise we can serve our collected statics in production as well.
+
+se logging.so later when app is deployed we can see the log file and troubleshoot issue.
+add logfile in .gitignore i.e general.log
+
+install gunicorm(fast server then testing dev server):
+then to run our app on gunicorm server use 'gunicorm StorefrontBackend2.wsgi'
+
+we can make our app pwa(for mobile non native app of same web)
+
+
+# ---- #
+Procfile(only for heroku) and write initial cmds every time our server start in procfile.
+configure heroku ad-on for our app and choose the db service (i.e CLEARBD on) for provisioning 
+mysql on our heroku cloud.
+'heroku config' -> to see the our env vars on heroku cloud server, copy CLEARBD url before '?'
+and create an env var 'heroku config:set DATABASE_URL(anything)="value of clear db env"'
+
+do the same in other vps but without procfiles
+
+5(only for heroku):
+provision a redis instance (ad-on heroku redis):
+provision our smtp server (ad-on Mailgun):
+
+# -----to install all the dependencies from requirements.txt
+# pip install -r requirements.txt
+# -----git global
+# echo "https://${GH_USERNAME}:${GH_TOKEN}@github.com" > ~/.git-credentials
+
+# This will create the ~/.git-credentials file and write the contents of your environment variables to it. The ${GH_USERNAME} and ${GH_TOKEN} syntax is used to reference the values of the environment variables.
+
+# To configure Git to use the credentials stored in the ~/.git-credentials file, you can run the following command:
+
+# lua
+
+# git config --global credential.helper store
+
+# This will set the Git global configuration setting credential.helper to store, which tells Git to use the contents of the ~/.git-credentials file for authentication.
+
+-----DATABASE-FOR-PORTFOLIO-CLIENT
+Enter the username: PortfolioUser
+Enter the password: com.1995
+Enter the database name: PortfolioDB
+
+<<<<<documentaion>>>>>
+drf-spectacular: generate openapi3 schemas with drf-spectacular, cz djangorestframework supports it, and then generate the documentation,and frontend code for that apis correctly with ease using swagger-ui
+more help--> https://www.youtube.com/watch?v=XBxssKYf5G0
+
+
+
+docker-machine create(rather then "create" we can use "rm --f life-sync-now-server" to remove this machine) \ 
+        --driver digitalocean \
+        --digitalocean-access-token dop_v1_dd66186ffe4d81e9e70f315f78ce677a59c0879c8bce4126f546ede24ae914e8 \
+        # --engine-install-url "https://releases.rancher.com/install-docker/19.03.9.sh" \ (only add this line in case of any error or problem)
+        --digitalocean-image ubuntu-22-10-x64 \
+        life-sync-now-server(as a server name, we can call it whatever);
+        # 
+arn:aws:iam::922994108393:user/qandeel-super-iam
+vpc-027df4fdaaf416c58
+# 
+docker-machine create --driver amazonec2 \
+--amazonec2-access-key abcd2abcdABCD \
+--amazonec2-secret-key abcd2abcdABCDabcd2abcdABCDabcd2abcdABCD/ \
+--amazonec2-instance-type t2.micro \
+--amazonec2-ami ami-0c7217cdde317cfec \
+--amazonec2-root-size 20 \
+qandeelkhan.com-prod-us-east-1-vps
+# remove instance details locally:
+docker-machine rm -f qandeelkhan.com-prod-us-east-1-vps
+# remove details from aws:
+
+# stop ec2 instance: (we can stop an instance instead of terminating it. Stopping an instance will shut it down, but its resources (such as EBS volumes and elastic IP addresses) will remain allocated to it. This allows you to restart the instance later if needed. To stop an instance, follow the same steps as above but choose "Stop" instead of "Terminate" in the AWS Management Console or use the aws ec2 stop-instances command in the AWS CLI)
+aws ec2 stop-instances 
+# remove details from aws (terminate instance): (check the status of your instance in the AWS Management Console or by running the aws ec2 describe-instances command in the AWS CLI. If the instance's state is listed as "terminated," the termination process has been completed successfully.) (remember that: When you terminate an EC2 instance, AWS shuts down the instance and releases its associated resources, such as EBS volumes and elastic IP addresses. Any data stored on the instance will be lost unless you have created a backup), (After you terminate an instance, it remains visible in the console for a short while, and then the entry is automatically deleted.You cannot delete the terminated instance entry yourself.)
+aws ec2 terminate-instances --instance-ids
+i.e:"aws ec2 terminate-instances --instance-ids i-0e84e5d19844fd10f"
+# see all instances/details of currently configured IAM user from aws:
+aws ec2 describe-instances
+# or more advance search
+aws ec2 describe-instances --filters Name=tag:Name,Values=qandeelkhan.com-prod-us-east-1-vps --query 'Reservations[*].Instances[*].InstanceId' --output text
+aws ec2 terminate-instances --instance-ids i-1234567890abcdef0
+# 
