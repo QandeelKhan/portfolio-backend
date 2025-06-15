@@ -20,7 +20,9 @@ urlpatterns = [
     path('user/token/', TokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('user/token/refresh/',
-         TokenRefreshView.as_view(), name='token_refresh'),
+         views.CustomTokenRefreshView.as_view(), name='token_refresh'),
+    #     path('user/token/refresh/',
+    #          TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 # --------- using router of rest framework

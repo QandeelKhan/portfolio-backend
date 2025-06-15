@@ -17,32 +17,37 @@ from UserManagement.serializers import (
     UserPasswordResetSerializer,
     UserProfileSerializer,
     UserRegistrationSerializer,
+    CustomTokenRefreshSerializer,
     GoogleLoginSerializer,
 )
 import datetime
-
+from rest_framework_simplejwt.views import TokenRefreshView
 
 def get_token_for_user(user):
     refresh = RefreshToken.for_user(user)
-    # Get the access token from the refresh token
     access = refresh.access_token
+
     # Get the lifetime of the access token in seconds
-    lifetime = access.lifetime.total_seconds()
-    # Get the current time in seconds
-    now = datetime.datetime.now().timestamp()
-    # Add the lifetime and the current time to get the accessExpires value in seconds
-    accessExpires = now + lifetime
-    # Convert the value to a string
-    # Create a datetime object from the number of seconds since the epoch
-    accessExpires = datetime.datetime.fromtimestamp(accessExpires)
-    # Convert the datetime object to a string in ISO 8601 format
-    accessExpires = accessExpires.isoformat()
-    accessExpires = str(accessExpires)
-    # Return the token object with the accessExpires property
+    access_lifetime = access.lifetime.total_seconds()
+    refresh_lifetime = refresh.lifetime.total_seconds()
+
+    # Get the current time
+    now = datetime.datetime.now(datetime.timezone.utc)
+
+    # Calculate the expiry times
+    access_expires = now + datetime.timedelta(seconds=access_lifetime)
+    refresh_expires = now + datetime.timedelta(seconds=refresh_lifetime)
+
+    # Convert the expiry times to ISO 8601 format strings
+    access_expires_str = access_expires.isoformat()
+    refresh_expires_str = refresh_expires.isoformat()
+
+    # Return the token object with the expiry properties
     return {
         'refresh': str(refresh),
         'access': str(access),
-        'accessExpires': accessExpires
+        'accessExpires': access_expires_str,
+        'refreshExpires': refresh_expires_str
     }
 
 
@@ -103,7 +108,13 @@ class UserLoginView(generics.CreateAPIView):
         else:
             return Response({'errors': {"non_field_errors": ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
 
+class CustomTokenRefreshView(TokenRefreshView):
+    serializer_class = CustomTokenRefreshSerializer
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 # not in use------
 # class GoogleLoginAPIView(APIView):
 #     permission_classes = []

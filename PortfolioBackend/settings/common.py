@@ -15,6 +15,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    # to make the custom createsuperuser command override and work with exact same name, we put it on top of auth app of django
+    'UserManagement',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.messages',
@@ -36,7 +38,6 @@ INSTALLED_APPS = [
     'orders',
     # --USER MANAGEMENT,
     'rest_framework_simplejwt',
-    'UserManagement',
     # 'allauth',
     # 'allauth.account',
     # 'allauth.socialaccount',
@@ -199,11 +200,6 @@ DJOSER = {
         'user_create': 'UserManagement.serializers.UserCreateSerializer',
         'current_user': 'UserManagement.serializers.UserSerializer',
     }
-}
-
-SIMPLE_JWT = {
-    'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1)
 }
 
 DEFAULT_FROM_EMAIL = 'com.qandeelhaider@gmail.com'

@@ -14,25 +14,24 @@ GOOGLE_CLIENT_ID=1058064034426-n73ogv8ugd2086nqp2k451jmcoqgtgkd.apps.googleuserc
 
 # *---DATABASES SETUP---*--for future
 # DEVELOPMENT   
-DEV_DB_USER=PortfolioUser
-DEV_DB_PASSWORD=com.1995
-DEV_DB_Name=PortfolioDB
+DEV_DB_USER=
+DEV_DB_PASSWORD=
+DEV_DB_Name=
 # PFODUCTION
-PROD_DB_USER=doadmin
-PROD_DB_PASSWORD=AVNS_BD8DweMwDlXA2pzt8Y-
-PROD_DB_NAME=PortfolioDB
-PROD_DB_HOST=our-db-postgresql-nyc1-1995-do-user-13516508-0.b.db.ondigitalocean.com
+PROD_DB_USER=
+PROD_DB_PASSWORD=
+PROD_DB_NAME=
+PROD_DB_HOST=
 PROD_DB_PORT=25060
 # sslmode  : require
 # *---DATABASES SETUP---*
 
 # *---SPACES---*
-AWS_ACCESS_KEY_ID=AKIA5NZV4M7USLYGOXPP
-AWS_SECRET_ACCESS_KEY=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
-AWS_STORAGE_BUCKET_NAME=qandeelkhan.com-bucket
-AWS_S3_ENDPOINT_URL=https://nyc3.digitaloceanspaces.com
-AWS_S3_REGION_NAME=ap-south-1
-
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_STORAGE_BUCKET_NAME=
+AWS_S3_ENDPOINT_URL=
+AWS_S3_REGION_NAME=
 
 # https://shoppingly-space.nyc3.digitaloceanspaces.com
 # digitalocean aws-key, these keys are s3 capable which means we can use a 3rd party package called "django-storages" that will treat these below keys as we normally would with AWS keys, basically it's like a username(AWS_ACCESS_KEY_ID) and password (AWS_SECRET_ACCESS_KEY) we can consider of static files api for this app.

@@ -92,22 +92,25 @@ class UserProfileSerializer(ModelSerializer):
 class UserChangePasswordSerializer(serializers.Serializer):
     password = serializers.CharField(
         max_length=255, style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(
+    password_confirm = serializers.CharField(
         max_length=255, style={'input_type': 'password'}, write_only=True)
 
     class Meta:
-        fields = ['password', 'password2']
+        fields = ['password', 'password_confirm']
 
     def validate(self, attrs):
         password = attrs.get('password')
-        password2 = attrs.get('password2')
-        user = self.context.get('user')
-        if password != password2:
+        password_confirm = attrs.get('password_confirm')
+        if password != password_confirm:
             raise serializers.ValidationError('Password does not match')
-            # if there's an error it will raise exception otherwise return the attrs
+        return attrs
+
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        password = self.validated_data['password']
         user.set_password(password)
         user.save()
-        return attrs
+        return user
 
 
 class SendPasswordResetEmailSerializer(serializers.Serializer):
@@ -127,8 +130,12 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             token = PasswordResetTokenGenerator().make_token(user)
             print('password reset token ', token)
             # generating a link of uid and token and set it port on frontend port
-            link = 'http://localhost:3000/api/user/reset/'+uid+'/'+token
-            print('password reset link ', link)
+            link = 'http://localhost:5173/api/user/reset/'+uid+'/'+token
+            # --------only for testing on backend: 
+            # get the link in terminal to get test on the backend side, and then pass the password + password_confirm json object in post req.
+            backendTestingLink = 'http://localhost:8000/api/reset-password/'+uid+'/'+token
+            print('password reset link for backend testing only', backendTestingLink)
+            # --------only for testing on backend: 
             # send above generated link to the email of the user.settings in settings.py file.and create a file as utils.py for sending email function using django
             body = 'Click Following Link to Reset Your Password '+link
             data = {
@@ -143,36 +150,41 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
 
 
 class UserPasswordResetSerializer(serializers.Serializer):
-    password = serializers.CharField(
-        max_length=255, style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(
-        max_length=255, style={'input_type': 'password'}, write_only=True)
+    password = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
+    password_confirm = serializers.CharField(max_length=255, style={'input_type': 'password'}, write_only=True)
 
     class Meta:
-        fields = ['password', 'password2']
+        fields = ['password', 'password_confirm']
 
     def validate(self, attrs):
+        password = attrs.get('password')
+        password_confirm = attrs.get('password_confirm')
+        uid = self.context.get('uid')
+        token = self.context.get('token')
+
+        # Initialize user variable
+        user = None
+
+        if password != password_confirm:
+            raise serializers.ValidationError('Password does not match')
+
         try:
-            password = attrs.get('password')
-            password2 = attrs.get('password2')
-            uid = self.context.get('uid')
-            token = self.context.get('token')
-            if password != password2:
-                raise serializers.ValidationError('Password does not match')
-                # if there's an error it will raise exception otherwise return the attrs
             # converting decoded uid to str
             id = smart_str(urlsafe_base64_decode(uid))
             # getting user from that id
             user = User.objects.get(id=id)
+
             if not PasswordResetTokenGenerator().check_token(user, token):
-                # because token'll be valid for 5 mints by default.we set its timing in settings.py.bcz this PasswordResetTokenGenerator() has feature of setting the expire time of token.
                 raise ValidationError('Token is not valid or Expired')
+
             user.set_password(password)
             user.save()
             return attrs
-        # just an extra layer of security for token it will work perfectly even if we don't add these try catch steps
-        except DjangoUnicodeDecodeError as identifire:
-            PasswordResetTokenGenerator().check_token(user, token)
+
+        except User.DoesNotExist:
+            raise ValidationError('No user found for the provided UID')
+
+        except DjangoUnicodeDecodeError as identifier:
             raise ValidationError("Token is not Valid or Expired")
 
 
@@ -187,3 +199,30 @@ class GoogleLoginSerializer(serializers.Serializer):
         if user and user.is_active:
             return user
         raise serializers.ValidationError("Incorrect Credentials")
+
+
+from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+import datetime
+class CustomTokenRefreshSerializer(TokenRefreshSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        refresh = RefreshToken(attrs['refresh'])
+
+        # Extract access token and its expiry time
+        access_token = str(refresh.access_token)
+        
+        # Get the current time with microseconds
+        now_with_microseconds = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+        
+        # Calculate the new expiration time by adding the token's lifetime to the current time
+        access_expires = now_with_microseconds + datetime.timedelta(seconds=refresh.access_token.lifetime.total_seconds())
+
+        # Format the expiration time with microseconds
+        access_expires_formatted = access_expires.strftime('%Y-%m-%dT%H:%M:%S.%f')
+
+        # Include access token and its formatted expiry time in the response
+        data['access'] = access_token
+        data['accessExpires'] = access_expires_formatted
+
+        return data

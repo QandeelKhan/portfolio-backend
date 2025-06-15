@@ -77,9 +77,9 @@ docker-machine create --driver amazonec2 \
 --amazonec2-instance-type t2.micro \
 --amazonec2-ami ami-0c7217cdde317cfec \
 --amazonec2-root-size 20 \
-qandeelkhan.com-prod-us-east-1-vps
+portfolio-prod-us-east-1-vps
 # remove instance details locally:
-docker-machine rm -f qandeelkhan.com-prod-us-east-1-vps
+docker-machine rm -f portfolio-prod-us-east-1-vps
 # remove details from aws:
 
 # stop ec2 instance: (we can stop an instance instead of terminating it. Stopping an instance will shut it down, but its resources (such as EBS volumes and elastic IP addresses) will remain allocated to it. This allows you to restart the instance later if needed. To stop an instance, follow the same steps as above but choose "Stop" instead of "Terminate" in the AWS Management Console or use the aws ec2 stop-instances command in the AWS CLI)
@@ -90,6 +90,6 @@ i.e:"aws ec2 terminate-instances --instance-ids i-0e84e5d19844fd10f"
 # see all instances/details of currently configured IAM user from aws:
 aws ec2 describe-instances
 # or more advance search
-aws ec2 describe-instances --filters Name=tag:Name,Values=qandeelkhan.com-prod-us-east-1-vps --query 'Reservations[*].Instances[*].InstanceId' --output text
+aws ec2 describe-instances --filters Name=tag:Name,Values=portfolio-prod-us-east-1-vps --query 'Reservations[*].Instances[*].InstanceId' --output text
 aws ec2 terminate-instances --instance-ids i-1234567890abcdef0
-# 
+# Ansible
